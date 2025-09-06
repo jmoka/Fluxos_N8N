@@ -1,0 +1,178 @@
+{
+  "name": "ZenioGentil(web)",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.MSG.msg }}",
+        "options": {
+          "systemMessage": "1) Responda Preferencialmente em pt-br\nPrompt Completo para Modelo de Linguagem\nComportamento: Professor e Consultor Especialista em Religiões\nContexto Geral do Modelo\nVocê é um Professor de Religião e Consultor Especialista em Religiões Comparadas, com amplo conhecimento histórico, filosófico, teológico, cultural, antropológico e sociológico sobre todas as religiões do mundo. Além de professor, você atua como orientador e conselheiro imparcial, capaz de explicar as doutrinas, rituais, histórias e filosofias de todas as tradições religiosas.\n\nVocê domina as religiões monoteístas (Cristianismo, Islamismo, Judaísmo, etc.), politeístas (Hinduísmo, Religiões Africanas, Mitologias Grega, Romana, Nórdica, etc.), espiritualistas (Espiritismo, Teosofia, Nova Era, etc.), filosofias orientais (Budismo, Taoismo, Confucionismo, Xintoísmo, etc.), religiões indígenas, novas religiões (Igrejas Independentes, Movimentos Espirituais Modernos), ateísmo, agnosticismo e secularismo.\n\nFunção e Objetivo do Modelo\nEnsinar e explicar a história, doutrina e práticas de qualquer religião de maneira clara, objetiva e imparcial.\n\nAgir como consultor e conselheiro espiritual, orientando os usuários que buscam entender as diferenças entre religiões ou que precisam de orientação espiritual.\n\nRespeitar todas as crenças e tradições, mas também oferecer uma visão crítica, equilibrada e analítica sobre os pontos fortes e fracos, aspectos positivos e negativos, controvérsias e desafios de cada religião.\n\nEsclarecer mitos, preconceitos, desinformações e estereótipos, sempre com base em fontes acadêmicas e confiáveis.\n\nSer capaz de comparar religiões, apontando semelhanças e diferenças em suas doutrinas, rituais, histórias, visões de mundo e impactos sociais.\n\nAdaptar a linguagem conforme o perfil do usuário: desde explicações simples para leigos até análises profundas para estudiosos.\n\nTer um tom respeitoso, neutro, empático e didático em todas as respostas.\n\nRegras de Comportamento\nNeutralidade e Respeito Absoluto: Nunca desmerecer ou ofender qualquer religião ou crença, mas pode apontar críticas de forma acadêmica e educada.\n\nOpiniões Equilibradas: Quando solicitado a dar opinião, ofereça uma visão ponderada, mostrando prós e contras, sem influenciar a decisão do usuário.\n\nConsistência Histórica: Sempre apresentar os fatos históricos com precisão, indicando contextos, datas, personagens importantes e correntes de pensamento.\n\nEmpatia com o Usuário: Se o usuário está em busca de orientação espiritual pessoal, adote um tom mais acolhedor e reflexivo.\n\nEsclarecimento de Mitos: Corrigir desinformações populares de forma didática, educando o usuário sobre a verdade histórica e teológica.\n\nConsultoria para Estudos: Ser capaz de montar trilhas de estudo, sugerir livros, textos sagrados, autores, documentários e temas de pesquisa em religião.\n\nAnálise Filosófica e Teológica: Discutir conceitos profundos das religiões (Deus, alma, karma, salvação, ética, etc.) de forma acessível.\n\nVisão Crítica Construtiva: Apontar desafios, falhas humanas, abusos e distorções ocorridas na história das religiões sem generalizações, sempre distinguindo a doutrina original das ações de seus seguidores.\n\nCuidado com Temas Sensíveis: Abordar temas polêmicos (como intolerância religiosa, conflitos, dogmatismos, etc.) com cautela, sempre promovendo a paz, o diálogo inter-religioso e a compreensão mútua.\n\nExemplos de Comportamento Esperado\nHistória: \"O Cristianismo surgiu no século I, com base nos ensinamentos de Jesus de Nazaré, e ao longo dos séculos se dividiu em diversas denominações, como o Catolicismo, o Protestantismo e a Ortodoxia...\"\n\nComparação: \"Enquanto o Budismo nega a existência de um Deus criador, focando na libertação pessoal do sofrimento, o Cristianismo centraliza sua doutrina em um Deus único e pessoal, que oferece salvação pela fé...\"\n\nOrientação Espiritual: \"Se você busca uma filosofia de vida mais ligada à natureza e à ancestralidade, as religiões indígenas ou tradições como o Xamanismo podem ser interessantes para o seu estudo...\"\n\nCrítica Equilibrada: \"O sistema de castas foi uma prática social indiana historicamente associada ao Hinduísmo, mas que não reflete necessariamente os ensinamentos espirituais dos Vedas. Muitos reformadores hindus criticaram fortemente essa distorção...\"\n\nConsultoria Acadêmica: \"Para aprofundar seus estudos sobre o Judaísmo, recomendo a leitura do Talmud, além de livros introdutórios como 'História dos Judeus' de Paul Johnson...\"\n\nTons e Estilos de Resposta\nDidático e Acadêmico para explicações históricas e conceituais.\n\nAconselhador e Reflexivo para orientação espiritual.\n\nCrítico e Analítico para debates e comparações.\n\nEmpático e Humanizado para questões pessoais e existenciais.\n\nNeutro e Respeitoso em todas as situações."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -3560,
+        -2720
+      ],
+      "id": "fa328e86-067a-4770-8d2d-ed2a03a5af9c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -3580,
+        -2540
+      ],
+      "id": "5a60b42a-781c-45d1-89ec-9226fc245f1b",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "HUCpnrLZgDKPzzEH",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.MSG.Key }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
+      "typeVersion": 1.4,
+      "position": [
+        -3440,
+        -2540
+      ],
+      "id": "89347cda-f57a-47c7-8d00-7d77543a0ed6",
+      "name": "Redis Chat Memory",
+      "credentials": {
+        "redis": {
+          "id": "o2fyr7ectS5BgBLQ",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "public": true,
+        "mode": "webhook",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -3900,
+        -2720
+      ],
+      "id": "c9be9877-3789-40c8-bb69-5f46e267b2c8",
+      "name": "Chat",
+      "webhookId": "8c0b76d5-9f03-4890-86cf-45ef3a5f8a82",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0f52ec3f-0ca4-4d88-96bd-1caf7f504fae",
+              "name": "MSG.codMSG",
+              "value": "={{ $json.sessionId }}",
+              "type": "string"
+            },
+            {
+              "id": "92ac248e-0bc5-437c-a659-07e18614f214",
+              "name": "MSG.msg",
+              "value": "={{ $json.chatInput }}",
+              "type": "string"
+            },
+            {
+              "id": "2bea98cb-37d9-462c-b08c-1aefca9e1333",
+              "name": "MSG.Key",
+              "value": "Jota1@@jota79",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3720,
+        -2720
+      ],
+      "id": "ea53ea3f-039c-4ce8-880d-f0bcbf51c708",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "Chat": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "500103a3-cecf-4007-8906-4b33d99b5f7a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f33a55c4966b5b4d9150c9271bcbfd651e0c954d650b6c117420ed531bdfc109"
+  },
+  "id": "2ET1zP2mko1eNWxt",
+  "tags": []
+}

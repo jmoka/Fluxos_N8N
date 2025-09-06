@@ -1,0 +1,2983 @@
+{
+  "name": "JOTA_ATENDENTE_MENSEGEM",
+  "nodes": [
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('desativar').item.json.body.data.key.remoteJid }}",
+        "contextWindowLength": 30
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        3648,
+        752
+      ],
+      "id": "1cbe15aa-6b2a-4b8d-8c42-174976725da9",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=mensegem do cliente : {{ $json.List_Array.map(item => JSON.parse(item).mensagem).join(', ') }}, o nome do cliente é {{ $json.Nome_Cliente }}",
+        "options": {
+          "systemMessage": "=<agente>\n<identidade>\n- Nome do agente:  Jota Assistente\n- Cargo/função: Atendente Virtual de Vendas da Jota Empresa\n- Tom de voz: Persuasivo, cordial e confiável.\n- Estilo de linguagem: Claro, direto e voltado a resultados, em formato para WhatsApp\n</identidade>\n<função>Sou responsável por **apresentar e vender os serviços da JotaEmpresas**, convencendo o cliente do valor e benefícios de contratar nossos serviços.\nServiços como , serviços contábeis, venda de certificado digital, venda  e instalação do sistema gdoor, regularização , constituição , alteração  e baixa de empresas , registro de funcionários e assessoria trabalhista, calculo trabalhista, legalização de associações, ongs, institutos , somos especialista em micro e pequenas empresas, dentre outros ...\n</função>\n<contexto>\nAgente especializado em contabilidade para micro e pequenas empreas, MEIs, Empresas do Simples Nacional, Lucro Presumido e profissionais autônomos, com foco em demonstrar valor, tirar dúvidas e incentivar a contratação.\n</contexto>\n<restrições>\n- O nome do cliente já está definido como: \"{{ $('Consulta Cliente').item.json.Nome_Cliente }}\".\n- Nunca pergunte novamente o nome se ele já existir.\n- Cumprimente sempre usando este nome.\n- Não inventar preços ou serviços \n- Nunca inventar informações sobre serviços ou preços\n- Não pressionar o cliente de forma agressiva\n- Não pode ser muitas informações ao mesmo tempo\n- Não gere todas as resposta de uma vez\n- nunca compramos nada para o cliente\n- nunca paga,os nenhum tipo de boleto para o cliete\n- Todas as taxas são enviadão para o cleinte para pagamento , nunca pagamos taxas ou impostos para o cliente\n-Recebemos apenas nossos honorários contratados nada alem disso\n</restrições>\n\n<instruções>\n  <saudação_e_identificação>\n  \"Crie uma saudação variada a cada vez que o cliente entrar em contato no dia, exemplo , se for a primeira vez no dia: Olá [nome do cliente] que bom o seu retorno como posso ajudar?, podendo variar conforme o horário, bom dia horario entre 00:01 as 12:00 , boa tarde horario entre 12:01 as 18:00 , boa noite horário entre 18:01 as 00:00”, o texto também!\n“caso seja a primeira vez quando não tiver no histórico da conversa o nome do cliente faça a saudação temporal e pergunte  qual o seu nome”\n </saudação_e_identificação>\n\n  <identificar_necessidade_do_cliente>\nSempre observar os seguintes pontos, se o cliente é a primeira vez seu contato, quais serviços ele deseja, e dependendo do tipo do serviço é importante saber se é empresa ou pessoa física, se possui ou não certificado digital, se o cliente tem ou sebe a senha do gov.br, se possui funcionários, entendendo o cliente de forma natural\n  </identificar_necessidade_do_cliente>\n\n  <procedimentos>\n  1. Usar a ferramenta <ConsultaServicosContabeis> para apresentar todos os serviços disponíveis, quando o cliente quiser contratar os serviços contábeis;\n  2. Destacar benefícios diretos (economia de tempo, redução de riscos, suporte especializado)\n  3. Adaptar a oferta ao perfil do cliente\n  4. Tirar dúvidas sobre preços, obrigações fiscais e processos\n  5. Reforçar confiança e segurança do serviço\n  6. Oferecer agendamento com consultor humano para fechamento do contrato\n7. Usar ferramenta <ConsultarServicosCertificado> para apresentar todos os serviços disponíveis, quando o cliente quiser comprar certificado digital\n8. Usar a ferramenta < ConsultarServicosGdoor> para apresentar todos os serviços disponiveis e sistemas disponiveis, quando o cliente quiser comprar o software gdoor\n9. Usar ferramenta <ConsultaDadosCliente> inicialmente para saber se o cliente e novato ou não, pois se o cliente não for novato ter outra abordagem\n10. quando for socilitado pelo cliente ou quando todas as explicações e duvidas já tiverem sido tiradas e o cliente não se decidiu qual serviço deseja , encaminhar para a ferramenta <EncaminharAtendente>\n  </procedimentos>\n  <resolução_de_dúvidas>\n  \"Entendo sua dúvida, [Nome]. Um momento que verifico a melhor solução para o seu caso...\"\n  </resolução_de_dúvidas>\n  <encerramento>\n  \"Fico feliz que tenha se interessado, [Nome]. Posso agendar agora mesmo uma reunião com nosso consultor  para que possamos iniciar o serviço e cuidar de toda a parte documental de da sua empresa?\"\n  </encerramento>\n</instruções>\n<conduta_profissional>\n- Ser persuasivo, mas cordial e respeitoso\n- Focar em benefícios reais para o cliente\n- Adaptar discurso ao perfil do cliente\n- Escutar e responder dúvidas com clareza\n</conduta_profissional>\n<ferramentas>\n<ferramenta nome=\"ConsultaServicosContabeis\">\n- Função: Informar detalhes de todos os serviços contábeis\n- Quando usar: Sempre que cliente solicitar informações ou dúvidas\n- Como retornar: Listar serviços, benefícios, preços e links de referência\n</ferramenta name=\"Suporte\">\n- Função: Indentificar qual suporte o cliente deseja\n- Quando usar: Sempre que cliente solicitar que quer falar com atendente\n- Como retornar: perguntar qual suporte deseja e assim que indentificar encaminhar\n-somente encaminha para a ferramenta quando indentificar qual tipod e suporte o cliente deseja, ou com quem ele quer falar\nAndre =  setor fiscal\ngildson = setor de legalização e alvará\nsuely = setor financeiro\ntatiana =  setor de folha de pagamento\n<ferramenta>\n</ferramenta>\n</ferramentas>\n<lembretes_importantes>\n- Certificado digital vendemos\n- Evite explicar tudo de uma so vez, entenda o cliente e explique compasadamente de acordo com o fluxo da conversa\n- Focar sempre em resolver problemas do cliente\n- Reforçar segurança e confiabilidade da empresa\n- Oferecer atendimento humano sempre que necessário\n- Sempre oferecer solução adaptada ao perfil do cliente\n-sempre priorize resumir , de forma compreensível para o cliente\n- mantenho o formato para whatsapp\n- sempre mantenha um dialogo com o cliente para melhor entender suas duvidas antes de sair explicando tudo de uma vez só\n- sempre seja o mais humanizado possível\n</lembretes_importantes>\n<dados_da_empresa>\n<endereço>Rua Coronel José do ó , 1645, mosqueiro</endereço>\n<telefone>(91) 9 9629-3532</telefone>\n<email>contador@jotaempresas.com</email>\n<horario_funcionamento>Seg-Sex 09:00-18:00</horario_funcionamento>\n<site>\nHome: https://jotaempresas.com/page/\nLoja : https://jotaempresas.com/page/loja/\ncontabilidade : https://jotaempresas.com/page/contabilidade/\nmei : https://jotaempresas.com/page/mei/\n</site>\n<descrição>\nA JotaEmpresas oferece serviços contábeis completos, com foco em MEIs, pequenas empresas e autônomos, garantindo economia, conformidade fiscal e suporte especializado.\n</descrição>\n</dados_da_empresa>\n</agente>\n</agentes>"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        3600,
+        560
+      ],
+      "id": "b87f2373-7b81-40ec-8767-4d57615e6901",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3104,
+        768
+      ],
+      "id": "ca9714c4-15bc-4255-9193-501599c59d7e",
+      "name": "Wait",
+      "webhookId": "23160b2c-bbea-4d48-9778-912920c2468d"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        3072,
+        320
+      ],
+      "id": "8a3ca076-ac63-4c91-8846-6afd8cfbde5e",
+      "name": "Nada a Fazer"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "={{ $('desativar').item.json.body.data.key.remoteJid }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        3136,
+        560
+      ],
+      "id": "ba062fc4-3dc1-4f98-9195-5f2b4fc73dcb",
+      "name": "deletar texto",
+      "credentials": {
+        "redis": {
+          "id": "rpCOUi93P9cj2fqI",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('desativar').item.json.body.data.messageType }}",
+                    "rightValue": "conversation",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "afe06d4a-a4c6-4248-ad9e-4ca8df286a8b"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Texto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "fe6aa196-dbca-4c4a-ba90-2983badb7b90",
+                    "leftValue": "={{ $('desativar').item.json.body.data.messageType }}",
+                    "rightValue": "conversation",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEquals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "diferente de texto"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1824,
+        512
+      ],
+      "id": "f7f09821-c145-4fc7-8fe1-d66ca96ee5cd",
+      "name": "TipoMSG"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "16d60689-a259-4617-a38f-8267ce535b69",
+              "name": "dados.camposIniciais",
+              "value": "={{ ($json.body).data }}",
+              "type": "string"
+            },
+            {
+              "id": "669aaa4f-ad0f-4982-906a-7c7a129adda2",
+              "name": "dados.menssageType",
+              "value": "={{ $json.body.data.messageType }}",
+              "type": "string"
+            },
+            {
+              "id": "249b28ed-8ded-4946-943d-00c3990b3fad",
+              "name": "dados.NumeroCliente",
+              "value": "={{ $json.body.data.key.remoteJid }}",
+              "type": "string"
+            },
+            {
+              "id": "dce5099c-c72b-47fc-9a3c-a5e861fed7c6",
+              "name": "dados.numeroInstancia",
+              "value": "={{ $json.body.sender }}",
+              "type": "string"
+            },
+            {
+              "id": "8f67777c-a73d-4362-a263-5a1580739290",
+              "name": "dados.Mensagem",
+              "value": "={{ $json.body.data.message.conversation }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -352,
+        256
+      ],
+      "id": "bb8e8432-7484-42f2-9bf0-14967a7f139d",
+      "name": "camposIniciais"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2144,
+        560
+      ],
+      "id": "e130fb95-4d33-41fd-a7a1-0739c520ce06",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        4768,
+        560
+      ],
+      "id": "87443eec-ec77-4314-842b-c58ebca63682",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        4944,
+        560
+      ],
+      "id": "9df88364-5a20-42be-858a-2d4be6776261"
+    },
+    {
+      "parameters": {
+        "jsCode": "const resposta = $json[\"resposta\"] || \"\";\n\n// Dividir apenas por parágrafos duplos (evita picotar CNAE e números internos)\nconst partes = resposta\n  .split(/\\n\\s*\\n/) // divide só quando há linha em branco\n  .map(p => p.trim())\n  .filter(Boolean);\n\nreturn [\n  {\n    json: { responses: partes }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4240,
+        560
+      ],
+      "id": "914c400e-cc6a-46c2-b483-7bf34205b199",
+      "name": "Codigo para Separar uma mensagem longa em vria menores"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "responses",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        4496,
+        560
+      ],
+      "id": "5f84e69e-79c0-417f-a637-55a73daa7da6",
+      "name": "Split Out- envia uma a uma"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "{{ $('camposIniciais').item.json.api_Evolution }}/message/sendText/{{ $('camposIniciais').item.json.instancia }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "429683C4C977415CAAFCCE10F7D57E11"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ \n  JSON.stringify({\n    number: $('desativar').item.json.body.data.key.remoteJid,\n    text: $json.responses\n  }) \n}}\n",
+        "options": {
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5168,
+        560
+      ],
+      "id": "b20be6cd-387a-48c2-a616-9a0f1354b9d6",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        4880,
+        352
+      ],
+      "id": "5b94f2b1-51b5-4ce1-848f-907767e13548",
+      "name": "No Operation, do nothing3"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        5424,
+        560
+      ],
+      "id": "8191724a-6df5-468c-b94d-af54c23004dc",
+      "name": "Wait3",
+      "webhookId": "85edace6-bbef-45ed-ab96-62a3ca12895c"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "de160a1c-94b3-4220-8f15-5aa7067d4489",
+              "leftValue": "={{ $('desativar').item.json.body.data.key.fromMe }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -400,
+        48
+      ],
+      "id": "ec2a4696-3ead-43d2-b023-8d9f464148a3",
+      "name": "Se a MSG e minha ou do Cliente"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "828ca079-8568-4583-bf01-8b51401b5993",
+              "leftValue": "={{ $json.created_at }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        592,
+        256
+      ],
+      "id": "fb097826-a24d-4f69-8a87-455074729227",
+      "name": "Empresa existe"
+    },
+    {
+      "parameters": {
+        "tableId": "Tbl_Empresas",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Nome_Razao",
+              "fieldValue": "={{ $('desativar').item.json.body.instance }}"
+            },
+            {
+              "fieldId": "Telefone",
+              "fieldValue": "={{ $('desativar').item.json.body.sender.split('@')[0] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        720,
+        432
+      ],
+      "id": "54a59abc-67c6-40c0-bda4-26801c910ef3",
+      "name": "CriarEmpresa",
+      "credentials": {
+        "supabaseApi": {
+          "id": "mGTQ4aUKloXMZy0V",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "Tbl_WhatsApp_Cliente",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "keyValue": "={{ $('Se a MSG e minha ou do Cliente').item.json.dados.NumeroCliente.split(\"@\")[0] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        848,
+        240
+      ],
+      "id": "67198354-920d-4f64-98ec-54bebdc871f1",
+      "name": "Consulta Cliente",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "mGTQ4aUKloXMZy0V",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "tableId": "Tbl_WhatsApp_Msg_Clientes",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "key_numero_cliente",
+              "fieldValue": "={{ $('Se a MSG e minha ou do Cliente').item.json.dados.NumeroCliente.split(\"@\")[0] }}"
+            },
+            {
+              "fieldId": "mensagem",
+              "fieldValue": "={{ $('desativar').item.json.body.data.message.conversation }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1408,
+        512
+      ],
+      "id": "66bf0dc9-32e7-441a-8fbb-e88ddfb45fea",
+      "name": "Cadastrar MSG",
+      "credentials": {
+        "supabaseApi": {
+          "id": "mGTQ4aUKloXMZy0V",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "Tbl_Empresas",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "keyValue": "={{$('desativar').item.json.body.sender.split('@')[0] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        240,
+        272
+      ],
+      "id": "39dbaac6-ebb0-4ff3-b836-fcb0ce92d2d9",
+      "name": "Verificar se Empresa Existe",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "mGTQ4aUKloXMZy0V",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "85d04941-33b3-437f-a42e-200719147e9a",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1008,
+        176
+      ],
+      "id": "280e151f-6da1-41ad-a063-0482770e2241",
+      "name": "Se Cliente Bloqueado",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "Tbl_WhatsApp_Cliente",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "keyValue": "={{ $json.dados.NumeroCliente.split(\"@\")[0] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        224
+      ],
+      "id": "d403aa63-e953-4669-a3b8-4e31f1fb8675",
+      "name": "ConsultaCliente",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "mGTQ4aUKloXMZy0V",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        -80
+      ],
+      "id": "333e761d-2adf-482f-b02e-8f3397414847",
+      "name": "No Operation, do nothing1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8b46c5d8-deba-4560-914d-8625f2034967",
+              "leftValue": "={{ $json.ai_ativa }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        272
+      ],
+      "id": "20bfb603-24cf-4f3d-a03e-7c4af6e9db69",
+      "name": "Verifica AI_Ativa",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "{{ $('camposIniciais').item.json.api_Evolution }}/message/sendText/{{ $('camposIniciais').item.json.instancia }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "429683C4C977415CAAFCCE10F7D57E11"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $('desativar').item.json.body.data.key.remoteJid }}\",\n  \"text\": \"API Bloqueada\"\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        704,
+        864
+      ],
+      "id": "ef6aea37-f5de-46b3-a48a-f883c5c0a2b1",
+      "name": "MSG API Bloqueada"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "65b41c4c-db0d-4d6d-97e0-dc29ec657673",
+              "name": "mensagem",
+              "value": "={{ $('desativar').item.json.body.data.message.conversation }}",
+              "type": "string"
+            },
+            {
+              "id": "5171c62c-5b3d-41b2-ab4e-f0612fc02ee0",
+              "name": "idmensagem",
+              "value": "={{ $json.key_numero_cliente }}",
+              "type": "string"
+            },
+            {
+              "id": "17001cb5-3de1-4e82-9884-4c92a9da15e2",
+              "name": "tempoMensagem",
+              "value": "={{ $('desativar').item.json.body.date_time }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2000,
+        400
+      ],
+      "id": "3bb6f558-776c-480b-847d-e01e7ef458de",
+      "name": "Organizador 1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "65b41c4c-db0d-4d6d-97e0-dc29ec657673",
+              "name": "mensagem",
+              "value": "={{ (JSON.parse($json.camposIniciais).message?.conversation) ?? \"Arquivo Invalido aceito somente texto no momento\" }}",
+              "type": "string"
+            },
+            {
+              "id": "5171c62c-5b3d-41b2-ab4e-f0612fc02ee0",
+              "name": "idmensagem",
+              "value": "={{(JSON.parse($json.camposIniciais).key).id}}",
+              "type": "string"
+            },
+            {
+              "id": "17001cb5-3de1-4e82-9884-4c92a9da15e2",
+              "name": "tempoMensagem",
+              "value": "=DateTime.fromSeconds(Number(JSON.parse($json.List_Array[0]).tempoMensagem || 0))",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1968,
+        672
+      ],
+      "id": "aa4b6d01-9bc5-46fc-aa84-5719b474009b",
+      "name": "Organizador2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "617daf23-c1ef-427d-9df3-d49e71a3365e",
+              "name": "ObjetoMensagem",
+              "value": "={{ $json.data[0] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2304,
+        560
+      ],
+      "id": "8efe773b-3b38-48c3-b34d-bdaf857ae2cb",
+      "name": "Organizador3"
+    },
+    {
+      "parameters": {
+        "operation": "push",
+        "list": "={{ $('desativar').item.json.body.data.key.remoteJid }}",
+        "messageData": "={{ $json.ObjetoMensagem }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        2480,
+        560
+      ],
+      "id": "44a25656-ffa6-4e84-8370-0dbc9e72660b",
+      "name": "Criar Tabela",
+      "credentials": {
+        "redis": {
+          "id": "rpCOUi93P9cj2fqI",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "List_Array",
+        "key": "={{ $('desativar').item.json.body.data.key.remoteJid }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        2688,
+        672
+      ],
+      "id": "4282ecf5-ff72-4d5f-9f78-32e34a5f2bb0",
+      "name": "Buscra Tabela_Rdis",
+      "credentials": {
+        "redis": {
+          "id": "rpCOUi93P9cj2fqI",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7808a4e1-dd7f-4b54-9219-9ae7f18d34f9",
+              "name": "msgs",
+              "value": "={{ \n$json.List_Array.map(item => JSON.parse(item).mensagem).join(' ').replace(/\\s+/g, ' ').trim()\n}}",
+              "type": "string"
+            },
+            {
+              "id": "eb0ed6f5-d670-4b6b-9a9e-fbee2b38538c",
+              "name": "key",
+              "value": "={{ $('desativar').item.json.body.data.key.remoteJid }}",
+              "type": "string"
+            },
+            {
+              "id": "215bea23-952e-41ef-a04b-fb4abf9ba85c",
+              "name": "Nome_Cliente",
+              "value": "={{ $('Consulta Cliente').item.json.Nome_Cliente }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3344,
+        560
+      ],
+      "id": "a5df914c-52e7-4a4b-8b4a-579dc951c38c",
+      "name": "Organizador4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f9b18715-895c-442f-b2b8-353bd94ee5b2",
+              "name": "resposta",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3984,
+        560
+      ],
+      "id": "e18c85a8-cbfe-4a96-b658-46876fd9eeaa",
+      "name": "Oraganizador5"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ JSON.parse($json.List_Array.first()).idmensagem }}",
+                    "rightValue": "={{ $('Aggregate').item.json.data[0].idmensagem }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEquals"
+                    },
+                    "id": "6b7f71a7-4d90-47b1-8d86-81001c6e7838"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "nada a fazer"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c99aa02f-7992-4ab0-a36d-a51f6823d8fd",
+                    "leftValue": "={{\n  DateTime.fromISO(JSON.parse($json.List_Array[0]).tempoMensagem)\n    .setZone('America/Sao_Paulo')\n}}",
+                    "rightValue": "={{\n  DateTime.now().setZone('America/Sao_Paulo').minus({ seconds: 20 })\n}}",
+                    "operator": {
+                      "type": "dateTime",
+                      "operation": "before"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "continuarTexto"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "ESPERAR"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2880,
+        528
+      ],
+      "id": "a3d7fa95-f7ec-42f7-8e17-5d3feb9898b3",
+      "name": "Switch2"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "={{ $('desativar').item.json.body.data.key.remoteJid }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        2384,
+        800
+      ],
+      "id": "69c80979-ac7f-43c4-a971-f52318fbde31",
+      "name": "deletar texto1",
+      "credentials": {
+        "redis": {
+          "id": "rpCOUi93P9cj2fqI",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "D8T6GUMsXjyK3lf4",
+          "mode": "list",
+          "cachedResultName": "MsgADMIN"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "dadosBase": "={{$json.dados}}"
+          },
+          "matchingColumns": [
+            "dadosBase"
+          ],
+          "schema": [
+            {
+              "id": "dadosBase",
+              "displayName": "dadosBase",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -544,
+        -272
+      ],
+      "id": "488a74d4-1760-45b2-94e3-a312690da4d5",
+      "name": "Mensagens_do_Administrador",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "Tbl_WhatsApp_Msg_Clientes",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "key_numero_cliente",
+              "condition": "eq",
+              "keyValue": "={{ $('Se a MSG e minha ou do Cliente').item.json.dados.NumeroCliente.split(\"@\")[0] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1616,
+        512
+      ],
+      "id": "3c2743aa-2f35-4542-9fc1-58b98476e724",
+      "name": "consultasMSGClientes",
+      "credentials": {
+        "supabaseApi": {
+          "id": "mGTQ4aUKloXMZy0V",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "Tbl_WhatsApp_Cliente",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Nome_Sistema",
+              "fieldValue": "={{ $('desativar').item.json.body.data.pushName }}"
+            },
+            {
+              "fieldId": "Telefone",
+              "fieldValue": "={{ $('desativar').item.json.body.data.key.remoteJid.split('@')[0] }}"
+            },
+            {
+              "fieldId": "senha",
+              "fieldValue": "={{ $('desativar').item.json.body.data.key.remoteJid.split('@')[0] }}"
+            },
+            {
+              "fieldId": "key_Empresa",
+              "fieldValue": "={{ $('camposIniciais').item.json.dados.numeroInstancia.split(\"@\")[0] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1104,
+        752
+      ],
+      "id": "ed24ac63-4788-4bc2-b87d-09ffceee7440",
+      "name": "Criar Cliente",
+      "credentials": {
+        "supabaseApi": {
+          "id": "mGTQ4aUKloXMZy0V",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "ConsultaServicosContabeis",
+        "description": "=<agente>\n<função>\nSou responsável por apresentar e vender os serviços contábeis da JotaEmpresas, mostrando benefícios e tirando dúvidas de clientes.\n</função>\n\n<contexto>\nEspecialista em contabilidade para MEIs, Simples Nacional, Lucro Presumido e autônomos. Foco em mostrar valor, resolver dúvidas e incentivar a contratação.\n</contexto>\n\n<procedimentos>\n1. Apresentar os serviços contábeis e  listar serviços contábeis quando solicitado.\n2. Destacar benefícios: economia de tempo, redução de riscos e suporte especializado.\n3. Adaptar a oferta ao perfil do cliente (MEI, Simples, Presumido).\n4. Reforçar confiança, clareza e segurança do serviço.\n5. Encaminhar para <EncaminharAtendente> se o cliente desejar falar com humano.\n</procedimentos>\n\n<conduta>\n- Persuasivo, mas respeitoso\n- Não inventar preços\n- Responder dúvidas com clareza\n</conduta>\n</agente>\n",
+        "workflowId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "2vVWl9SlmD4kFwvn",
+          "cachedResultName": "ConsultaServicosContabeis"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "dados": "={{ $('camposIniciais').item.json.dados }}"
+          },
+          "matchingColumns": [
+            "dados"
+          ],
+          "schema": [
+            {
+              "id": "dados",
+              "displayName": "dados",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        4032,
+        912
+      ],
+      "id": "7d95c61a-2a05-4e78-9b65-07495b2a3530",
+      "name": "ConsultaServicosContabeis",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "77567a07-a8b6-42b1-a056-b77fc9a23b74",
+                    "leftValue": "={{ $json.Telefone }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "existe"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a7c2259d-582f-4fb8-a160-ff04a9d8ca4b",
+                    "leftValue": "={{ $json.Telefone }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notExists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "N_Exiiste"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        976,
+        544
+      ],
+      "id": "c2473e35-0008-430e-8ec1-53051b872371",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3a4ffcf1-c827-4201-9aef-5773852e4861",
+              "leftValue": "={{ $json.Nome_Cliente }}",
+              "rightValue": "null",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1216,
+        352
+      ],
+      "id": "9a296f13-e43d-4e26-82fd-ae08873574ea",
+      "name": "Verificar se o nome do cliente esta cadastrado"
+    },
+    {
+      "parameters": {
+        "text": "={{ $('desativar').item.json.body.data.message.conversation }}",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "nome",
+              "description": "Extrair apenas o nome da pessoa da frase, e sempre confirme o nome da poessoa antes de cadastrar "
+            },
+            {
+              "name": "confirmacao",
+              "description": "Extrar true ou false quando o cliente confirmar o nome"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        1488,
+        144
+      ],
+      "id": "34a83bee-96fa-435d-ae1a-d6038d1f97f9",
+      "name": "Information Extractor",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "options": {
+          "maxOutputTokens": 1024,
+          "temperature": 0.4,
+          "topK": 20,
+          "topP": 0.9
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1504,
+        304
+      ],
+      "id": "b10fd8c6-8003-4a41-bc60-783138194148",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "141ifzSHRqqToKxL",
+          "name": "Gemini_Bacu"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "608bcb2c-5e17-4d5c-b655-5808f1623329",
+              "name": "NomeCliente",
+              "value": "={{ $json.output.nome }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1680,
+        0
+      ],
+      "id": "4ed8f530-9e19-49c5-8bb5-4f15154bf34c",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5d387c3a-e863-4d96-a5f0-f4e6d63bceb6",
+              "leftValue": "={{ $json.NomeCliente }}",
+              "rightValue": "=null",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1936,
+        0
+      ],
+      "id": "a55d0466-663e-43de-bb48-e579b9608d11",
+      "name": "If",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5b1d9660-3bf5-4b53-954e-6aa4e10f89ae",
+              "name": "mensagem",
+              "value": "Pergunte ao cliente qual o nome dele",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2272,
+        -208
+      ],
+      "id": "2ba82d98-959e-4022-9e8e-c5277c0b6eff",
+      "name": "perguntar ao cliente o seu nome"
+    },
+    {
+      "parameters": {
+        "description": "indentificar qual tipo de suporte o cliente deseja",
+        "workflowId": {
+          "__rl": true,
+          "value": "tkLuAUjLznNC7dph",
+          "mode": "list",
+          "cachedResultName": "ChamarSuporte"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "dados": "={{ $('camposIniciais').item.json.dados }}"
+          },
+          "matchingColumns": [
+            "dados"
+          ],
+          "schema": [
+            {
+              "id": "dados",
+              "displayName": "dados",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        3856,
+        928
+      ],
+      "id": "f286dbc7-b34f-47e1-9763-23ce04dbb9f6",
+      "name": "Suporte"
+    },
+    {
+      "parameters": {
+        "options": {
+          "maxOutputTokens": 1024,
+          "temperature": 0.4,
+          "topK": 20,
+          "topP": 0.9
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3504,
+        752
+      ],
+      "id": "8f552e6e-f897-4da8-8edb-3426b36f4c37",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "141ifzSHRqqToKxL",
+          "name": "Gemini_Bacu"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "Tbl_Empresas",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "keyValue": "={{ $json.NumeroCliente.split(\"@\")[0] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        368,
+        -576
+      ],
+      "id": "584b574a-84a4-437c-9ec0-c1aa71d5040d",
+      "name": "Busca a Empresa",
+      "credentials": {
+        "supabaseApi": {
+          "id": "mGTQ4aUKloXMZy0V",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "{{ $('camposIniciais').item.json.api_Evolution }}/message/sendText/{{ $('camposIniciais').item.json.instancia }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "429683C4C977415CAAFCCE10F7D57E11"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $('desativar').item.json.body.data.key.remoteJid }}\",\n  \"text\": \"API Ativa\"\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1584,
+        -800
+      ],
+      "id": "dd05fa80-30b8-4e45-a757-38f180a47b61",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "{{ $('camposIniciais').item.json.api_Evolution }}/message/sendText/{{ $('camposIniciais').item.json.instancia }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "429683C4C977415CAAFCCE10F7D57E11"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $('camposIniciais1').item.json.instancia }}\",\n  \"text\": \"API Dasativada\"\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1584,
+        -608
+      ],
+      "id": "335c516b-7535-4adf-8057-0d485c56ee3f",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Tbl_Empresas",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "condition": "eq",
+              "keyValue": "={{ $('camposIniciais').item.json.dados.numeroInstancia.split(\"@\")[0] }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "ai_ativa",
+              "fieldValue": "false"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        -608
+      ],
+      "id": "a7ee6fc1-d120-4220-b983-5873f32dd437",
+      "name": "Desativar",
+      "alwaysOutputData": false,
+      "credentials": {
+        "supabaseApi": {
+          "id": "mGTQ4aUKloXMZy0V",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        -304
+      ],
+      "id": "ae452119-c570-43e2-a0a5-af8f4f96e29b",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "43a3adfa-2e77-4d1f-a72e-55472b91a81d",
+              "leftValue": "={{ $json.instancia }}",
+              "rightValue": "={{ $json.NumeroCliente }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        160,
+        -160
+      ],
+      "id": "579dfbfa-eb0e-431f-b61c-b56ea895bbc1",
+      "name": "Ativar/Desativar ou Responder",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Tbl_Empresas",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "condition": "eq",
+              "keyValue": "={{ $('Busca a Empresa').item.json.Telefone }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "ai_ativa",
+              "fieldValue": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        -800
+      ],
+      "id": "17bdd0da-6fa8-42c2-970d-28e41ece4a6d",
+      "name": "Ativar",
+      "credentials": {
+        "supabaseApi": {
+          "id": "mGTQ4aUKloXMZy0V",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9d3b459b-0734-4033-b0cd-d0555008c72b",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "=",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        544,
+        -144
+      ],
+      "id": "a1e7f7b0-890e-4e19-93a2-90c15ff5c1d5",
+      "name": "AtivarCliente",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "16d60689-a259-4617-a38f-8267ce535b69",
+              "name": "camposIniciais",
+              "value": "={{ $json.dados }}",
+              "type": "string"
+            },
+            {
+              "id": "669aaa4f-ad0f-4982-906a-7c7a129adda2",
+              "name": "menssageType",
+              "value": "={{ $json.dados.menssageType }}",
+              "type": "string"
+            },
+            {
+              "id": "249b28ed-8ded-4946-943d-00c3990b3fad",
+              "name": "NumeroCliente",
+              "value": "={{ $json.dados.NumeroCliente.split(\"@\")[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "c6a7d174-6d63-430e-b26b-123dca75cf2b",
+              "name": "instancia",
+              "value": "={{ $json.dados.numeroInstancia.split(\"@\")[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "10a05999-98ce-44e8-91b7-af9f59e08c3c",
+              "name": "msg",
+              "value": "={{ $json.dados.Mensagem }}",
+              "type": "string"
+            },
+            {
+              "id": "fdb8be34-31f8-4024-bfff-8f7c3b9ba3ed",
+              "name": "cliente",
+              "value": "={{ $('desativar').item.json.body.instance }}",
+              "type": "string"
+            },
+            {
+              "id": "ef64f454-de83-477d-afdc-d9cb1c354513",
+              "name": "clienteRef",
+              "value": "={{ $('desativar').item.json.body.data.pushName }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -288,
+        -192
+      ],
+      "id": "23d3a1c4-5e3e-4ab8-9b2e-41b247537804",
+      "name": "camposIniciais1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "de160a1c-94b3-4220-8f15-5aa7067d4489",
+              "leftValue": "={{ $('desativar').item.json.body.data.key.fromMe }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -96,
+        -176
+      ],
+      "id": "2a13a222-ae05-4d78-9dc5-f462d8a9daf9",
+      "name": "Se a MSG e minha ou do Cliente1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('camposIniciais1').item.json.msg }}",
+                    "rightValue": "=true",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "b6755389-ade5-4148-abdb-5ec69e3b9970"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ativar Bot"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f6e5a168-b3d1-4b0f-aff9-15c063c31fda",
+                    "leftValue": "={{ $('camposIniciais1').item.json.msg }}",
+                    "rightValue": "false",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Desativar Bot"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "555a3b92-0d66-428e-8d27-b2e859f1273b",
+                    "leftValue": "={{ $('camposIniciais1').item.json.msg }}",
+                    "rightValue": "={{ $json.Telefone }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        832,
+        -640
+      ],
+      "id": "afe0685d-3daf-43c4-bc68-c3285058de0f",
+      "name": "Switch",
+      "alwaysOutputData": false,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "mensagem",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -608,
+        256
+      ],
+      "id": "89bb4009-141b-4891-b674-7485e132d9ea",
+      "name": "desativar",
+      "webhookId": "2add2a3d-8d11-4ce9-b174-676e0829d6ff"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "Tbl_WhatsApp_Cliente",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "keyValue": "={{ $('camposIniciais').item.json.dados.Mensagem }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        592,
+        -592
+      ],
+      "id": "42bc67df-1f58-4af4-aea7-2c9654af2d7d",
+      "name": "ConsultaCliente1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "mGTQ4aUKloXMZy0V",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Tbl_WhatsApp_Cliente",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "condition": "eq",
+              "keyValue": "={{ $json.Telefone }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        -432
+      ],
+      "id": "fce20358-d670-4f01-a72a-d305e706b9ae",
+      "name": "Ativar Cliente",
+      "credentials": {
+        "supabaseApi": {
+          "id": "mGTQ4aUKloXMZy0V",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "{{ $('camposIniciais').item.json.api_Evolution }}/message/sendText/{{ $('camposIniciais').item.json.instancia }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "429683C4C977415CAAFCCE10F7D57E11"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $('desativar').item.json.body.data.key.remoteJid }}\",\n  \"text\": \"Cliente Foi Desbloqueado : {{ $json.Nome_Cliente }}\"\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1584,
+        -448
+      ],
+      "id": "da74910d-a1c5-4eba-90eb-8c11bdb954dd",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Tbl_WhatsApp_Cliente",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "condition": "eq",
+              "keyValue": "={{ $('desativar').item.json.body.data.key.remoteJid.split(\"@\")[0] }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Nome_Cliente",
+              "fieldValue": "={{ $json.NomeCliente }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2288,
+        128
+      ],
+      "id": "b8a01ea9-1996-408e-84db-cbc3c703f78f",
+      "name": "cadastrar nome cliente",
+      "credentials": {
+        "supabaseApi": {
+          "id": "mGTQ4aUKloXMZy0V",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Tbl_WhatsApp_Cliente",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "=true"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "false"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        672,
+        -16
+      ],
+      "id": "1a212f20-4148-4d02-9aa4-eb930af54914",
+      "name": "Bloquear Cliente",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "mGTQ4aUKloXMZy0V",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "{{ $('camposIniciais').item.json.api_Evolution }}/message/sendText/{{ $('camposIniciais').item.json.instancia }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "429683C4C977415CAAFCCE10F7D57E11"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $('camposIniciais').item.json.dados.numeroInstancia }}\",\n  \"text\": \"Cliente Bloqueado: {{ $('Se a MSG e minha ou do Cliente1').item.json.clienteRef }}; Com Nome : {{ $('Se a MSG e minha ou do Cliente1').item.json.cliente }}\"\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        864,
+        -16
+      ],
+      "id": "949a5969-f01d-4b94-9581-6611a3194848",
+      "name": "MSG Bloqueio"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "Tbl_WhatsApp_Cliente",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "keyValue": "={{ $json.NumeroCliente }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        336,
+        -32
+      ],
+      "id": "473f7978-4025-4bc1-a8fa-3b4ec9904dc3",
+      "name": "ConsultaCliente2",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "mGTQ4aUKloXMZy0V",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        720,
+        -304
+      ],
+      "id": "791deb68-8c7c-4e28-8942-6d30fc93ff21",
+      "name": "No Operation, do nothing2"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Nome_Cliente }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notExists",
+                      "singleValue": true
+                    },
+                    "id": "5d16a1e1-6e8e-44da-9cf0-8497e32d99fa"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "nãoExiste"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f795f32a-bce6-4158-bb52-86db01755a25",
+                    "leftValue": "={{ $json.Nome_Cliente }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Existe"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1200,
+        176
+      ],
+      "id": "2242b57b-4abf-4257-8f4b-d4cd1a21a69b",
+      "name": "nome existe?"
+    }
+  ],
+  "pinData": {
+    "desativar": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n108-n8n.it1327.easypanel.host",
+            "user-agent": "axios/1.7.9",
+            "content-length": "1090",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "content-type": "application/json",
+            "x-forwarded-for": "172.18.0.1",
+            "x-forwarded-host": "n8n108-n8n.it1327.easypanel.host",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "d54abd6f78ad",
+            "x-real-ip": "172.18.0.1"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "event": "messages.upsert",
+            "instance": "jota",
+            "data": {
+              "key": {
+                "remoteJid": "559196293532@s.whatsapp.net",
+                "fromMe": false,
+                "id": "78C5895F55E5D2C11F10E9F6F050DBC7"
+              },
+              "pushName": "Jota Empresas",
+              "status": "DELIVERY_ACK",
+              "message": {
+                "messageContextInfo": {
+                  "deviceListMetadata": {
+                    "senderKeyHash": "bj39Q4UXS5VTdw==",
+                    "senderTimestamp": "1756378809",
+                    "recipientKeyHash": "+CES1QNUilc/6Q==",
+                    "recipientTimestamp": "1756379022"
+                  },
+                  "deviceListMetadataVersion": 2,
+                  "messageSecret": "iDjyiVOyBjMyhksjRC1BEFhm1FZAXwZRHDMNDfd6z9o="
+                },
+                "conversation": "João"
+              },
+              "contextInfo": {
+                "expiration": 0,
+                "ephemeralSettingTimestamp": "1722438233",
+                "disappearingMode": {
+                  "initiator": "CHANGED_IN_CHAT",
+                  "trigger": "UNKNOWN",
+                  "initiatedByMe": false
+                }
+              },
+              "messageType": "conversation",
+              "messageTimestamp": 1756688874,
+              "instanceId": "0aaf2f65-5273-4165-8984-802e12c3e667",
+              "source": "android"
+            },
+            "destination": "https://n8n108-n8n.it1327.easypanel.host/webhook-test/mensagem",
+            "date_time": "2025-08-31T22:07:54.734Z",
+            "sender": "559185700436@s.whatsapp.net",
+            "server_url": "https://evolution-evolution-api.it1327.easypanel.host",
+            "apikey": "83DEED54D2BE-4CED-9E7C-80DEFD496AFB"
+          },
+          "webhookUrl": "https://n8n108-n8n.it1327.easypanel.host/webhook-test/mensagem",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Buscra Tabela_Rdis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "deletar texto": {
+      "main": [
+        [
+          {
+            "node": "Organizador4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TipoMSG": {
+      "main": [
+        [
+          {
+            "node": "Organizador 1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Organizador2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "camposIniciais": {
+      "main": [
+        [
+          {
+            "node": "Se a MSG e minha ou do Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Organizador3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Codigo para Separar uma mensagem longa em vria menores": {
+      "main": [
+        [
+          {
+            "node": "Split Out- envia uma a uma",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out- envia uma a uma": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Wait3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait3": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se a MSG e minha ou do Cliente": {
+      "main": [
+        [
+          {
+            "node": "camposIniciais1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ConsultaCliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Empresa existe": {
+      "main": [
+        [
+          {
+            "node": "Consulta Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CriarEmpresa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CriarEmpresa": {
+      "main": [
+        [
+          {
+            "node": "Consulta Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consulta Cliente": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cadastrar MSG": {
+      "main": [
+        [
+          {
+            "node": "consultasMSGClientes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar se Empresa Existe": {
+      "main": [
+        [
+          {
+            "node": "Verifica AI_Ativa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se Cliente Bloqueado": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "nome existe?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ConsultaCliente": {
+      "main": [
+        [
+          {
+            "node": "Verificar se Empresa Existe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verifica AI_Ativa": {
+      "main": [
+        [
+          {
+            "node": "Empresa existe",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MSG API Bloqueada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Organizador 1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Organizador2": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Organizador3": {
+      "main": [
+        [
+          {
+            "node": "Criar Tabela",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Tabela": {
+      "main": [
+        [
+          {
+            "node": "Buscra Tabela_Rdis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscra Tabela_Rdis": {
+      "main": [
+        [
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Organizador4": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Oraganizador5": {
+      "main": [
+        [
+          {
+            "node": "Codigo para Separar uma mensagem longa em vria menores",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch2": {
+      "main": [
+        [
+          {
+            "node": "Nada a Fazer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "deletar texto",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "consultasMSGClientes": {
+      "main": [
+        [
+          {
+            "node": "TipoMSG",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Cliente": {
+      "main": [
+        [
+          {
+            "node": "Cadastrar MSG",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ConsultaServicosContabeis": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Oraganizador5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Se Cliente Bloqueado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar se o nome do cliente esta cadastrado": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cadastrar MSG",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "perguntar ao cliente o seu nome",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "cadastrar nome cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "perguntar ao cliente o seu nome": {
+      "main": [
+        [
+          {
+            "node": "TipoMSG",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Suporte": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca a Empresa": {
+      "main": [
+        [
+          {
+            "node": "ConsultaCliente1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Desativar": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ativar/Desativar ou Responder": {
+      "main": [
+        [
+          {
+            "node": "Busca a Empresa",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ConsultaCliente2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ativar": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AtivarCliente": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Bloquear Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "camposIniciais1": {
+      "main": [
+        [
+          {
+            "node": "Se a MSG e minha ou do Cliente1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se a MSG e minha ou do Cliente1": {
+      "main": [
+        [
+          {
+            "node": "Ativar/Desativar ou Responder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Verificar se Empresa Existe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Ativar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Desativar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ativar Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "desativar": {
+      "main": [
+        [
+          {
+            "node": "camposIniciais",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ConsultaCliente1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ativar Cliente": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "cadastrar nome cliente": {
+      "main": [
+        [
+          {
+            "node": "TipoMSG",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bloquear Cliente": {
+      "main": [
+        [
+          {
+            "node": "MSG Bloqueio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ConsultaCliente2": {
+      "main": [
+        [
+          {
+            "node": "AtivarCliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "nome existe?": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Verificar se o nome do cliente esta cadastrado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5673e930-35b4-4ae9-91f4-d4d235397757",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8d6a81903df25a55a6d6de4c95daa350b74c6e400ef38aa531aa16f227a14a4d"
+  },
+  "id": "0oIgiT3HjA92GOcw",
+  "tags": []
+}
