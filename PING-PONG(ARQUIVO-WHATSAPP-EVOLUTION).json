@@ -1,0 +1,200 @@
+{
+  "name": "PING-PONG(ARQUIVO-WHATSAPP-EVOLUTION)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "mensagem",
+        "options": {}
+      },
+      "name": "Webhook WhatsApp",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        96,
+        -224
+      ],
+      "id": "aff1b8dc-0f0f-4383-91be-fec2ebd2f15b",
+      "webhookId": "2093c915-8a1e-4c00-9a83-21065566c91b"
+    },
+    {
+      "parameters": {
+        "operation": "toJson",
+        "options": {
+          "format": true,
+          "encoding": "base64"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        368,
+        -224
+      ],
+      "id": "a0f36f3f-a64f-488f-b5ca-4204e7cde4e1",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "operation": "send-document",
+        "instanceName": "={{ $('Webhook WhatsApp').item.json.body.instance }}",
+        "remoteJid": "={{ $('Webhook WhatsApp').item.json.body.data.key.remoteJid }}",
+        "media": "data",
+        "caption": "teste",
+        "fileName": "={{ $('Webhook WhatsApp').item.json.body.data.message.documentMessage.title }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        1248,
+        -112
+      ],
+      "id": "585d895e-6a68-454d-ba93-9b9f1097b285",
+      "name": "Enviar documento",
+      "credentials": {
+        "evolutionApi": {
+          "id": "kenzWw3wCtJaVm0N",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        976,
+        -112
+      ],
+      "id": "48ef6829-eb31-4380-bae9-626526d80e9c"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        816,
+        -272
+      ],
+      "id": "2fa59471-ff9d-42aa-bb32-8d63be73bfe4",
+      "name": "No Operation, do nothing3"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1488,
+        -112
+      ],
+      "id": "3aa09739-02ee-4994-9624-34b4a76c8fb1",
+      "name": "Wait3",
+      "webhookId": "4dcbf335-2ca1-48b5-b24f-2ddd0eb404a6"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        624,
+        -224
+      ],
+      "id": "163bf7f3-1d4e-4150-992f-05a6736f7885",
+      "name": "Loop Over Items1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Enviar documento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait3": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar documento": {
+      "main": [
+        [
+          {
+            "node": "Wait3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b006dfc0-3495-4f01-abc2-99043c64caf0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8d6a81903df25a55a6d6de4c95daa350b74c6e400ef38aa531aa16f227a14a4d"
+  },
+  "id": "5sC1jUSCaDAuhtQt",
+  "tags": []
+}
